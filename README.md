@@ -1,7 +1,7 @@
 # Piczilla
 
 The app is meant to fetch a set of images from an API. The utility methods for the same have been provided. You have to show these images on UI with two buttons Next and Previous. They should fetch random images and set them in an ImageView. Please also make an LRU for effective image loading and caching.
-The scope of the app should not require the usage of any libraries. Please try to write clean code with well-defined architecture.
+The scope of the app should not require the usage of any libraries. Please try to <b>write clean and well-organized code</b> with proper architecture.
 
 
 Please fetch the images from the API below
