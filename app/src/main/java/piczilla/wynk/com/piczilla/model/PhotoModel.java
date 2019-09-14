@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by navratan on 2019-09-03
+ * Created by navratan on 2019-09-14
  */
 public class PhotoModel {
 

@@ -1,7 +1,7 @@
 package piczilla.wynk.com.piczilla.model;
 
 /**
- * Created by navratan on 2019-09-03
+ * Created by navratan on 2019-09-14
  */
 
 import com.google.gson.annotations.Expose;

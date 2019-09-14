@@ -1,52 +1,63 @@
 package piczilla.wynk.com.piczilla;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import piczilla.wynk.com.piczilla.viewmodel.FetchDataViewModel;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity{
 
-    FetchDataViewModel viewModel;
+    private FetchDataViewModel viewModel;
     private ImageView imageView;
+    private ProgressBar progressBar;
+    private Button nextButton;
+    private Button previousButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_view);
-        initView();
         initViewModel();
+        initView();
     }
 
     public void initView() {
         imageView = findViewById(R.id.imageview);
+        progressBar = findViewById(R.id.progress_circular);
+        nextButton = findViewById(R.id.next);
+        nextButton.setOnClickListener(v -> fetchNext());
+        previousButton = findViewById(R.id.previous);
+        previousButton.setEnabled(false);
+        previousButton.setOnClickListener(v -> fetchPrevious());
     }
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(MainActivity.this).get(FetchDataViewModel.class);
         viewModel.getBitmapLiveData().observe(MainActivity.this, bitmap -> {
-             imageView.setImageBitmap(bitmap);
+             progressBar.setVisibility(View.GONE);
+             previousButton.setEnabled(true);
+             nextButton.setEnabled(true);
+             if(bitmap != null)
+                 imageView.setImageBitmap(bitmap);
         });
     }
 
+    public void fetchNext() {
+        progressBar.setVisibility(View.VISIBLE);
+        previousButton.setEnabled(false);
+        nextButton.setEnabled(false);
+        viewModel.fetchNext();
+    }
 
-    @Override
-    public void onClick(View v) {
-       switch (v.getId()) {
-           case R.id.previous:
-               viewModel.fetchPrevousImage();
-               break;
-           case R.id.next:
-               viewModel.fetchNextImage();
-               break;
-       }
+    public void fetchPrevious() {
+        progressBar.setVisibility(View.VISIBLE);
+        previousButton.setEnabled(false);
+        nextButton.setEnabled(false);
+        viewModel.fetchPreviuos();
     }
 }
