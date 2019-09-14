@@ -67,7 +67,7 @@ public class Utility {
      */
     public static Bitmap getBitmapFromURL(String src) {
         try {
-            URL url = new URL("http://s3-ap-southeast-1.amazonaws.com/bsbcms/music/1440680430882/srch_saregama_INH100901955.jpg");
+            URL url = new URL(src);
             HttpURLConnection connection = (HttpURLConnection) url
                     .openConnection();
             connection.setDoInput(true);
