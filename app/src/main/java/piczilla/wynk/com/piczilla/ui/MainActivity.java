@@ -1,4 +1,4 @@
-package piczilla.wynk.com.piczilla;
+package piczilla.wynk.com.piczilla.ui;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import piczilla.wynk.com.piczilla.R;
 import piczilla.wynk.com.piczilla.viewmodel.FetchDataViewModel;
 
 public class MainActivity extends AppCompatActivity{
