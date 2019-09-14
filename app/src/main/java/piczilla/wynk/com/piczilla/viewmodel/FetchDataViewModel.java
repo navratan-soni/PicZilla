@@ -2,14 +2,11 @@ package piczilla.wynk.com.piczilla.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.graphics.Bitmap;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import piczilla.wynk.com.piczilla.interfaces.ResponseListener;
-import piczilla.wynk.com.piczilla.model.SearchResultModel;
+import piczilla.wynk.com.piczilla.model.UiStateModel;
 import piczilla.wynk.com.piczilla.utils.FetchImageAysncTask;
 import piczilla.wynk.com.piczilla.utils.FetchResponseAsyncTask;
 import piczilla.wynk.com.piczilla.utils.Utility;
@@ -19,12 +16,14 @@ import piczilla.wynk.com.piczilla.utils.Utility;
  */
 public class FetchDataViewModel extends ViewModel {
 
-    private MutableLiveData<Bitmap> bitmapLiveData;
+    private MutableLiveData<UiStateModel> bitmapLiveData;
     private List<String> allImages;
     private int currentImageIndex = -1;
     private int totalPages = Integer.MAX_VALUE;
     private int currentPageNo = 0;
 
+    private FetchResponseAsyncTask reponseTask;
+    private FetchImageAysncTask imaegTask;
 
     public FetchDataViewModel() {
         bitmapLiveData = new MutableLiveData<>();
@@ -33,10 +32,6 @@ public class FetchDataViewModel extends ViewModel {
 
     public void fetchNext() {
        if(currentImageIndex == allImages.size()-1) {
-           if(currentPageNo == totalPages) {
-               bitmapLiveData.setValue(null);
-               return;
-           }
            fetchResponse();
        } else {
            fetchNextImage();
@@ -50,14 +45,17 @@ public class FetchDataViewModel extends ViewModel {
         }
         fetchPreviousImage();
     }
-    public MutableLiveData<Bitmap> getBitmapLiveData() {
+    public MutableLiveData<UiStateModel> getBitmapLiveData() {
         return bitmapLiveData;
     }
 
     private void fetchNextImage() {
+        
         Utility.execute(new FetchImageAysncTask(allImages.get(currentImageIndex+1), response -> {
-            bitmapLiveData.setValue(response);
             currentImageIndex++;
+            bitmapLiveData.setValue(new UiStateModel(response,
+                    currentImageIndex > 0,
+                       currentPageNo <= totalPages));
         }));
     }
 
@@ -73,8 +71,11 @@ public class FetchDataViewModel extends ViewModel {
 
     private void fetchPreviousImage() {
         Utility.execute(new FetchImageAysncTask(allImages.get(currentImageIndex-1), response -> {
-            bitmapLiveData.setValue(response);
             currentImageIndex--;
+            bitmapLiveData.setValue(new UiStateModel(response,
+                    currentImageIndex > 0,
+                    currentPageNo <= totalPages));
+
         }));
     }
 

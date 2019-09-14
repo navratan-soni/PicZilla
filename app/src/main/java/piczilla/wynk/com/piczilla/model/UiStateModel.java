@@ -19,4 +19,16 @@ public class UiStateModel {
         this.enabledPreviuos = enabledPreviuos;
         this.enabledNext = enabledNext;
     }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public boolean isEnabledPreviuos() {
+        return enabledPreviuos;
+    }
+
+    public boolean isEnabledNext() {
+        return enabledNext;
+    }
 }

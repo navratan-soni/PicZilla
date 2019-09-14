@@ -39,12 +39,11 @@ public class MainActivity extends AppCompatActivity{
 
     private void initViewModel() {
         viewModel = ViewModelProviders.of(MainActivity.this).get(FetchDataViewModel.class);
-        viewModel.getBitmapLiveData().observe(MainActivity.this, bitmap -> {
+        viewModel.getBitmapLiveData().observe(MainActivity.this, uiStateModel -> {
              progressBar.setVisibility(View.GONE);
-             previousButton.setEnabled(true);
-             nextButton.setEnabled(true);
-             if(bitmap != null)
-                 imageView.setImageBitmap(bitmap);
+             previousButton.setEnabled(uiStateModel.isEnabledPreviuos());
+             nextButton.setEnabled(uiStateModel.isEnabledNext());
+             imageView.setImageBitmap(uiStateModel.getBitmap());
         });
     }
 
