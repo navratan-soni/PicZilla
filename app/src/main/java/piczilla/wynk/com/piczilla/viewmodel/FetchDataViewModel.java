@@ -50,37 +50,45 @@ public class FetchDataViewModel extends ViewModel {
     }
 
     private void fetchNextImage() {
-        
-        Utility.execute(new FetchImageAysncTask(allImages.get(currentImageIndex+1), response -> {
+        imaegTask = new FetchImageAysncTask(allImages.get(currentImageIndex+1), response -> {
             currentImageIndex++;
             bitmapLiveData.setValue(new UiStateModel(response,
                     currentImageIndex > 0,
-                       currentPageNo <= totalPages));
-        }));
+                    currentPageNo <= totalPages));
+        });
+        Utility.execute(imaegTask);
     }
 
     private void fetchResponse() {
-
-        Utility.execute(new FetchResponseAsyncTask(currentPageNo + 1, response -> {
+        reponseTask = new FetchResponseAsyncTask(currentPageNo + 1, response -> {
             currentPageNo = response.getCurrentPage();
             totalPages = response.getPages();
             allImages.addAll(response.getImageUrls());
             fetchNextImage();
-        }));
+        });
+        Utility.execute(reponseTask);
     }
 
     private void fetchPreviousImage() {
-        Utility.execute(new FetchImageAysncTask(allImages.get(currentImageIndex-1), response -> {
+        imaegTask = new FetchImageAysncTask(allImages.get(currentImageIndex-1), response -> {
             currentImageIndex--;
             bitmapLiveData.setValue(new UiStateModel(response,
                     currentImageIndex > 0,
                     currentPageNo <= totalPages));
 
-        }));
+        });
+        Utility.execute(imaegTask);
     }
 
     @Override
     protected void onCleared() {
         super.onCleared();
+        if(imaegTask != null) {
+            imaegTask.cancel(true);
+        }
+
+        if(reponseTask != null) {
+            reponseTask.cancel(true);
+        }
     }
 }
